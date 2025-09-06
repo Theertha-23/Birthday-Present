@@ -4,28 +4,30 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Happy Birthday My World</title>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
 <style>
     body {
         margin: 0;
         font-family: 'Poppins', sans-serif;
         background: linear-gradient(135deg, #f9e1f0, #ffe8f5);
         overflow-x: hidden;
+        position: relative;
     }
 
     h1 {
         text-align: center;
-        font-size: 32px;
+        font-size: 36px;
         margin: 20px 0;
         color: #d63384;
-        font-weight: bold;
+        font-family: 'Great Vibes', cursive;
     }
 
     .gallery {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        display: flex;
+        flex-wrap: wrap;
         gap: 20px;
         padding: 20px;
-        justify-items: center;
+        justify-content: center;
         position: relative;
     }
 
@@ -33,8 +35,17 @@
         width: 180px;
         height: 240px;
         perspective: 1000px;
-        position: relative;
-        transform: rotate(var(--angle));
+        position: absolute;
+        cursor: pointer;
+        opacity: 0;
+        transition: transform 0.3s, z-index 0.3s;
+        transform-style: preserve-3d;
+        animation: fadeIn 0.6s forwards;
+    }
+
+    .card:hover {
+        transform: scale(1.08) rotate(var(--angle)) translate(var(--tx), var(--ty));
+        z-index: 10;
     }
 
     .card-inner {
@@ -43,7 +54,6 @@
         position: relative;
         transform-style: preserve-3d;
         transition: transform 0.8s;
-        cursor: pointer;
     }
 
     .card.flipped .card-inner {
@@ -63,7 +73,7 @@
     .card-front img {
         width: 100%;
         height: 100%;
-        object-fit: cover; /* full image */
+        object-fit: cover;
     }
 
     .card-back {
@@ -77,23 +87,38 @@
         padding: 10px;
         transform: rotateY(180deg);
         text-align: center;
+        font-family: 'Great Vibes', cursive;
     }
 
     .decor {
         position: absolute;
-        width: 150px;
-        height: 150px;
+        width: 120px;
+        height: 120px;
         opacity: 0.15;
         z-index: -1;
     }
 
-    .decor:nth-child(1) { top: 10%; left: 5%; transform: rotate(20deg); }
-    .decor:nth-child(2) { top: 30%; right: 5%; transform: rotate(-30deg); }
-    .decor:nth-child(3) { bottom: 10%; left: 20%; transform: rotate(40deg); }
-    .decor:nth-child(4) { bottom: 15%; right: 15%; transform: rotate(-20deg); }
+    .abstract {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        background: rgba(255, 200, 220, 0.4);
+        border-radius: 50%;
+        z-index: -1;
+        animation: float 6s infinite ease-in-out alternate;
+    }
+
+    @keyframes fadeIn {
+        to { opacity: 1; }
+    }
+
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        100% { transform: translateY(-20px); }
+    }
 
     @media (max-width: 600px) {
-        h1 { font-size: 24px; }
+        h1 { font-size: 28px; }
         .card { width: 140px; height: 200px; }
     }
 </style>
@@ -104,17 +129,22 @@
 
 <!-- Background music -->
 <audio autoplay loop>
-    <source src="https://www.mfiles.co.uk/mp3-downloads/debussy-clair-de-lune.mp3" type="audio/mp3">
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-12.mp3" type="audio/mp3">
     Your browser does not support audio.
 </audio>
 
 <div class="gallery" id="gallery"></div>
 
-<!-- Decorative flowers (SVG for puzzle effect) -->
+<!-- Decorative flowers (SVG) -->
 <img src="https://www.svgrepo.com/show/309249/flower.svg" class="decor">
 <img src="https://www.svgrepo.com/show/309249/flower.svg" class="decor">
 <img src="https://www.svgrepo.com/show/309249/flower.svg" class="decor">
 <img src="https://www.svgrepo.com/show/309249/flower.svg" class="decor">
+
+<!-- Abstract shapes for puzzle effect -->
+<div class="abstract" style="top:10%; left:15%;"></div>
+<div class="abstract" style="top:50%; left:80%;"></div>
+<div class="abstract" style="top:70%; left:30%;"></div>
 
 <script>
 const quotes = [
@@ -133,7 +163,20 @@ const gallery = document.getElementById('gallery');
 for (let i = 1; i <= totalImages; i++) {
     const card = document.createElement('div');
     card.className = 'card';
-    card.style.setProperty('--angle', `${Math.random() * 10 - 5}deg`); // Random rotation
+
+    // Random position
+    const x = Math.random() * (window.innerWidth - 200);
+    const y = Math.random() * (window.innerHeight - 300);
+    const angle = Math.random() * 30 - 15; // rotate -15 to 15
+    const tx = Math.random() * 10 - 5 + 'px';
+    const ty = Math.random() * 10 - 5 + 'px';
+
+    card.style.left = x + 'px';
+    card.style.top = y + 'px';
+    card.style.setProperty('--angle', angle + 'deg');
+    card.style.setProperty('--tx', tx);
+    card.style.setProperty('--ty', ty);
+    card.style.zIndex = Math.floor(Math.random() * 5);
 
     const cardInner = document.createElement('div');
     cardInner.className = 'card-inner';
@@ -141,7 +184,7 @@ for (let i = 1; i <= totalImages; i++) {
     const front = document.createElement('div');
     front.className = 'card-front';
     const img = document.createElement('img');
-    img.src = `photo${i}.jpg`;
+    img.src = `photo${i}.jpg`; // replace with your photos
     front.appendChild(img);
 
     const back = document.createElement('div');
@@ -158,6 +201,14 @@ for (let i = 1; i <= totalImages; i++) {
 
     gallery.appendChild(card);
 }
+
+// Randomize decorative flowers
+const decors = document.querySelectorAll('.decor');
+decors.forEach(decor => {
+    decor.style.top = `${Math.random()*80}%`;
+    decor.style.left = `${Math.random()*80}%`;
+    decor.style.transform = `rotate(${Math.random()*360}deg)`;
+});
 </script>
 
 </body>
