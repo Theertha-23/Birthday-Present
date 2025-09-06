@@ -3,137 +3,82 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Interactive Puzzle Collage</title>
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<title>Puzzle Style Image Grid</title>
 <style>
     body {
         font-family: Arial, sans-serif;
-        background: #f8f8f8;
         display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin: 0;
-        padding: 20px;
-    }
-
-    h1 {
-        font-family: 'Pacifico', cursive;
-        color: #e91e63;
-        margin-bottom: 20px;
-        text-align: center;
-    }
-
-    .collage {
-        display: grid;
-        grid-template-areas: 
-            "big medium1 medium2"
-            "wide1 small1 small2"
-            "wide2 wide2 wide2";
-        grid-gap: 10px;
-        max-width: 900px;
-        width: 100%;
-    }
-
-    .item {
-        position: relative;
-        background: #fff;
-        border-radius: 12px;
-        overflow: hidden;
-        perspective: 1000px;
-    }
-
-    .front, .back {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        backface-visibility: hidden;
-        transition: transform 0.8s;
-        display: flex;
-        align-items: center;
         justify-content: center;
-        border-radius: 12px;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background: #f4f4f4;
     }
 
-    .front img {
-        width: 100%;
-        height: 100%;
+    .puzzle-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 8px;
+        width: 90%;
+        max-width: 900px;
+    }
+
+    .puzzle-piece {
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        position: relative;
+        padding: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .puzzle-piece img {
+        max-width: 100%;
+        max-height: 100%;
         object-fit: contain;
-        background: #f0f0f0;
+        display: block;
+        border-radius: 8px;
     }
 
-    .back {
-        transform: rotateY(180deg);
-        background: #e91e63;
-        color: #fff;
-        font-size: 1.2rem;
-        text-align: center;
-        padding: 10px;
+    /* Optional puzzle effect with slight rotation */
+    .puzzle-piece:nth-child(odd) {
+        transform: rotate(-2deg);
     }
-
-    .item:hover .front {
-        transform: rotateY(180deg);
-    }
-
-    .item:hover .back {
-        transform: rotateY(360deg);
-    }
-
-    .big { grid-area: big; height: 300px; }
-    .medium1 { grid-area: medium1; height: 145px; }
-    .medium2 { grid-area: medium2; height: 145px; }
-    .wide1 { grid-area: wide1; height: 150px; }
-    .wide2 { grid-area: wide2; height: 150px; }
-    .small1 { grid-area: small1; height: 145px; }
-    .small2 { grid-area: small2; height: 145px; }
-
-    @media (max-width: 700px) {
-        .collage {
-            grid-template-areas:
-                "big"
-                "medium1"
-                "medium2"
-                "wide1"
-                "small1"
-                "small2"
-                "wide2";
-        }
-        .item { height: 220px; }
+    .puzzle-piece:nth-child(even) {
+        transform: rotate(2deg);
     }
 </style>
 </head>
 <body>
-<h1>Happy Birthday!</h1>
-<div class="collage">
-    <div class="item big">
-        <div class="front"><img src="photo1.jpg" alt=""></div>
-        <div class="back">Quote 1</div>
-    </div>
-    <div class="item medium1">
-        <div class="front"><img src="photo2.jpg" alt=""></div>
-        <div class="back">Quote 2</div>
-    </div>
-    <div class="item medium2">
-        <div class="front"><img src="photo3.jpg" alt=""></div>
-        <div class="back">Quote 3</div>
-    </div>
-    <div class="item wide1">
-        <div class="front"><img src="photo4.jpg" alt=""></div>
-        <div class="back">Quote 4</div>
-    </div>
-    <div class="item small1">
-        <div class="front"><img src="photo5.jpg" alt=""></div>
-        <div class="back">Quote 5</div>
-    </div>
-    <div class="item small2">
-        <div class="front"><img src="photo6.jpg" alt=""></div>
-        <div class="back">Quote 6</div>
-    </div>
-    <div class="item wide2">
-        <div class="front"><img src="photo7.jpg" alt=""></div>
-        <div class="back">Quote 7</div>
-    </div>
+
+<div class="puzzle-container" id="puzzleContainer">
+    <!-- Images will be added dynamically -->
 </div>
+
+<script>
+    const images = [
+        'image1.jpg',
+        'image2.jpg',
+        'image3.jpg',
+        'image4.jpg'
+    ];
+
+    const container = document.getElementById('puzzleContainer');
+
+    images.forEach(src => {
+        const div = document.createElement('div');
+        div.classList.add('puzzle-piece');
+
+        const img = document.createElement('img');
+        img.src = src;
+
+        div.appendChild(img);
+        container.appendChild(div);
+    });
+</script>
+
 </body>
 </html>
