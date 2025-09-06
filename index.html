@@ -23,12 +23,9 @@
     }
 
     .gallery {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-        padding: 20px;
-        justify-content: center;
         position: relative;
+        width: 100%;
+        height: 100vh;
     }
 
     .card {
@@ -38,14 +35,9 @@
         position: absolute;
         cursor: pointer;
         opacity: 0;
-        transition: transform 0.3s, z-index 0.3s;
         transform-style: preserve-3d;
         animation: fadeIn 0.6s forwards;
-    }
-
-    .card:hover {
-        transform: scale(1.08) rotate(var(--angle)) translate(var(--tx), var(--ty));
-        z-index: 10;
+        transition: transform 0.3s, z-index 0.3s;
     }
 
     .card-inner {
@@ -117,6 +109,14 @@
         100% { transform: translateY(-20px); }
     }
 
+    @keyframes jiggle {
+        0% { transform: rotate(var(--angle)) translate(var(--tx), var(--ty)); }
+        25% { transform: rotate(calc(var(--angle) + 2deg)) translate(var(--tx), var(--ty)); }
+        50% { transform: rotate(var(--angle)) translate(var(--tx), var(--ty)); }
+        75% { transform: rotate(calc(var(--angle) - 2deg)) translate(var(--tx), var(--ty)); }
+        100% { transform: rotate(var(--angle)) translate(var(--tx), var(--ty)); }
+    }
+
     @media (max-width: 600px) {
         h1 { font-size: 28px; }
         .card { width: 140px; height: 200px; }
@@ -141,7 +141,7 @@
 <img src="https://www.svgrepo.com/show/309249/flower.svg" class="decor">
 <img src="https://www.svgrepo.com/show/309249/flower.svg" class="decor">
 
-<!-- Abstract shapes for puzzle effect -->
+<!-- Abstract shapes -->
 <div class="abstract" style="top:10%; left:15%;"></div>
 <div class="abstract" style="top:50%; left:80%;"></div>
 <div class="abstract" style="top:70%; left:30%;"></div>
@@ -167,7 +167,7 @@ for (let i = 1; i <= totalImages; i++) {
     // Random position
     const x = Math.random() * (window.innerWidth - 200);
     const y = Math.random() * (window.innerHeight - 300);
-    const angle = Math.random() * 30 - 15; // rotate -15 to 15
+    const angle = Math.random() * 30 - 15; // -15 to 15 deg
     const tx = Math.random() * 10 - 5 + 'px';
     const ty = Math.random() * 10 - 5 + 'px';
 
@@ -176,7 +176,7 @@ for (let i = 1; i <= totalImages; i++) {
     card.style.setProperty('--angle', angle + 'deg');
     card.style.setProperty('--tx', tx);
     card.style.setProperty('--ty', ty);
-    card.style.zIndex = Math.floor(Math.random() * 5);
+    card.style.zIndex = i; // set initial z-index
 
     const cardInner = document.createElement('div');
     cardInner.className = 'card-inner';
@@ -184,7 +184,7 @@ for (let i = 1; i <= totalImages; i++) {
     const front = document.createElement('div');
     front.className = 'card-front';
     const img = document.createElement('img');
-    img.src = `photo${i}.jpg`; // replace with your photos
+    img.src = `photo${i}.jpg`;
     front.appendChild(img);
 
     const back = document.createElement('div');
@@ -195,8 +195,19 @@ for (let i = 1; i <= totalImages; i++) {
     cardInner.appendChild(back);
     card.appendChild(cardInner);
 
+    // Flip on click
     card.addEventListener('click', () => {
         card.classList.toggle('flipped');
+    });
+
+    // Jiggle & bring to front on hover
+    card.addEventListener('mouseenter', () => {
+        card.style.zIndex = 100; // bring forward
+        card.style.animation = 'jiggle 0.6s infinite';
+    });
+    card.addEventListener('mouseleave', () => {
+        card.style.zIndex = i; // reset
+        card.style.animation = '';
     });
 
     gallery.appendChild(card);
