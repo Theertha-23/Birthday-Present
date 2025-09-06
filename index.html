@@ -11,7 +11,6 @@
         font-family: 'Poppins', sans-serif;
         background: linear-gradient(135deg, #f9e1f0, #ffe8f5);
         overflow-x: hidden;
-        position: relative;
     }
 
     h1 {
@@ -23,18 +22,20 @@
     }
 
     .gallery {
-        position: relative;
-        width: 100%;
-        height: 90vh;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+        padding: 20px;
+        justify-items: center;
     }
 
     .card {
-        width: 180px;
-        height: 240px;
-        position: absolute;
-        cursor: pointer;
+        width: 150px;
+        height: 200px;
         transform-style: preserve-3d;
-        transition: transform 0.5s;
+        transition: transform 0.6s;
+        cursor: pointer;
+        transform: rotate(var(--angle));
     }
 
     .card-inner {
@@ -42,7 +43,7 @@
         height: 100%;
         position: relative;
         transform-style: preserve-3d;
-        transition: transform 0.8s;
+        transition: transform 0.6s;
     }
 
     .card.flipped .card-inner {
@@ -56,7 +57,7 @@
         backface-visibility: hidden;
         border-radius: 12px;
         overflow: hidden;
-        box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
 
     .card-front img {
@@ -79,32 +80,9 @@
         font-family: 'Great Vibes', cursive;
     }
 
-    .decor {
-        position: absolute;
-        width: 120px;
-        height: 120px;
-        opacity: 0.15;
-        z-index: -1;
-    }
-
-    .abstract {
-        position: absolute;
-        width: 100px;
-        height: 100px;
-        background: rgba(255, 200, 220, 0.4);
-        border-radius: 50%;
-        z-index: -1;
-        animation: float 6s infinite ease-in-out alternate;
-    }
-
-    @keyframes float {
-        0% { transform: translateY(0px); }
-        100% { transform: translateY(-20px); }
-    }
-
     @media (max-width: 600px) {
         h1 { font-size: 28px; }
-        .card { width: 140px; height: 200px; }
+        .card { width: 120px; height: 160px; }
     }
 </style>
 </head>
@@ -112,33 +90,16 @@
 
 <h1>Happy Birthday My World</h1>
 
-<!-- Background music -->
-<audio autoplay loop>
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-12.mp3" type="audio/mp3">
-    Your browser does not support audio.
-</audio>
-
 <div class="gallery" id="gallery"></div>
-
-<!-- Decorative flowers -->
-<img src="https://www.svgrepo.com/show/309249/flower.svg" class="decor">
-<img src="https://www.svgrepo.com/show/309249/flower.svg" class="decor">
-<img src="https://www.svgrepo.com/show/309249/flower.svg" class="decor">
-<img src="https://www.svgrepo.com/show/309249/flower.svg" class="decor">
-
-<!-- Abstract shapes -->
-<div class="abstract" style="top:10%; left:15%;"></div>
-<div class="abstract" style="top:50%; left:80%;"></div>
-<div class="abstract" style="top:70%; left:30%;"></div>
 
 <script>
 const quotes = [
-    "Bubuu You make every day beautiful ❤️",
-    "Me and You are forever 🌸",
-    "Like I always say.. Your smile is my sunshine ☀️",
-    "I love you more than words could describe 💕",
+    "You make every day beautiful ❤️",
+    "My world is brighter with you 🌸",
+    "Your smile is my sunshine ☀️",
+    "I love you more than words 💕",
     "With you, every moment is magic ✨",
-    "BOOBIES 🥰",
+    "You are my favorite person 🥰",
     "Happy Birthday, My Forever ❤️"
 ];
 
@@ -149,14 +110,9 @@ for (let i = 1; i <= totalImages; i++) {
     const card = document.createElement('div');
     card.className = 'card';
 
-    // Random position without overlapping too much
-    const x = Math.random() * (window.innerWidth - 200);
-    const y = Math.random() * (window.innerHeight - 280);
-    const angle = Math.random() * 20 - 10; // -10 to 10 degrees
-    card.style.left = x + 'px';
-    card.style.top = y + 'px';
-    card.style.transform = `rotate(${angle}deg)`;
-    card.style.zIndex = i;
+    // Small random angle for a subtle tilt
+    const angle = Math.random() * 6 - 3; // -3 to 3 degrees
+    card.style.setProperty('--angle', `${angle}deg`);
 
     const cardInner = document.createElement('div');
     cardInner.className = 'card-inner';
@@ -164,7 +120,7 @@ for (let i = 1; i <= totalImages; i++) {
     const front = document.createElement('div');
     front.className = 'card-front';
     const img = document.createElement('img');
-    img.src = `photo${i}.jpg`; // replace with your images
+    img.src = `photo${i}.jpg`; // Replace with your image paths
     front.appendChild(img);
 
     const back = document.createElement('div');
@@ -175,21 +131,12 @@ for (let i = 1; i <= totalImages; i++) {
     cardInner.appendChild(back);
     card.appendChild(cardInner);
 
-    // Flip on click
     card.addEventListener('click', () => {
         card.classList.toggle('flipped');
     });
 
     gallery.appendChild(card);
 }
-
-// Randomize decorative flowers
-const decors = document.querySelectorAll('.decor');
-decors.forEach(decor => {
-    decor.style.top = `${Math.random()*80}%`;
-    decor.style.left = `${Math.random()*80}%`;
-    decor.style.transform = `rotate(${Math.random()*360}deg)`;
-});
 </script>
 
 </body>
