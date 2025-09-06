@@ -3,82 +3,70 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Puzzle Style Image Grid</title>
+<title>Happy Birthday!</title>
 <style>
     body {
-        font-family: Arial, sans-serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
         margin: 0;
-        background: #f4f4f4;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background: #f8f9fa;
     }
 
-    .puzzle-container {
+    h1 {
+        margin: 20px 0;
+        color: #d63384;
+        font-size: 28px;
+    }
+
+    .gallery {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 8px;
-        width: 90%;
-        max-width: 900px;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 12px;
+        padding: 15px;
+        justify-items: center;
     }
 
-    .puzzle-piece {
-        background: white;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        position: relative;
-        padding: 5px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+    .gallery img {
+        width: 100%;
+        height: auto; /* ✅ No cropping */
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease;
     }
 
-    .puzzle-piece img {
-        max-width: 100%;
-        max-height: 100%;
-        object-fit: contain;
-        display: block;
-        border-radius: 8px;
+    .gallery img:hover {
+        transform: scale(1.05);
     }
 
-    /* Optional puzzle effect with slight rotation */
-    .puzzle-piece:nth-child(odd) {
-        transform: rotate(-2deg);
-    }
-    .puzzle-piece:nth-child(even) {
-        transform: rotate(2deg);
+    @media (max-width: 600px) {
+        h1 {
+            font-size: 22px;
+        }
     }
 </style>
 </head>
 <body>
 
-<div class="puzzle-container" id="puzzleContainer">
-    <!-- Images will be added dynamically -->
-</div>
+<h1>Happy Birthday!</h1>
+<div class="gallery" id="gallery"></div>
 
 <script>
-    const images = [
-        'image1.jpg',
-        'image2.jpg',
-        'image3.jpg',
-        'image4.jpg'
-    ];
+window.onload = function() {
+    const totalImages = 10; // ✅ Change this to your number of photos
+    const gallery = document.getElementById('gallery');
 
-    const container = document.getElementById('puzzleContainer');
-
-    images.forEach(src => {
-        const div = document.createElement('div');
-        div.classList.add('puzzle-piece');
-
+    for (let i = 1; i <= totalImages; i++) {
         const img = document.createElement('img');
-        img.src = src;
-
-        div.appendChild(img);
-        container.appendChild(div);
-    });
+        img.src = `photo${i}.jpg`; // ✅ Your naming convention
+        img.alt = `photo${i}`;
+        img.onerror = function() {
+            console.error(`Image not found: photo${i}.jpg`);
+        };
+        gallery.appendChild(img);
+    }
+};
 </script>
 
 </body>
 </html>
+
