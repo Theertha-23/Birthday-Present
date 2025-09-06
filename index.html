@@ -3,70 +3,162 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happy Birthday!</title>
+<title>Happy Birthday My World</title>
 <style>
     body {
         margin: 0;
-        font-family: Arial, sans-serif;
-        text-align: center;
-        background: #f8f9fa;
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #f9e1f0, #ffe8f5);
+        overflow-x: hidden;
     }
 
     h1 {
+        text-align: center;
+        font-size: 32px;
         margin: 20px 0;
         color: #d63384;
-        font-size: 28px;
+        font-weight: bold;
     }
 
     .gallery {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        gap: 12px;
-        padding: 15px;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 20px;
+        padding: 20px;
         justify-items: center;
+        position: relative;
     }
 
-    .gallery img {
+    .card {
+        width: 180px;
+        height: 240px;
+        perspective: 1000px;
+        position: relative;
+        transform: rotate(var(--angle));
+    }
+
+    .card-inner {
         width: 100%;
-        height: auto; /* ✅ No cropping */
-        border-radius: 12px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-        transition: transform 0.3s ease;
+        height: 100%;
+        position: relative;
+        transform-style: preserve-3d;
+        transition: transform 0.8s;
+        cursor: pointer;
     }
 
-    .gallery img:hover {
-        transform: scale(1.05);
+    .card.flipped .card-inner {
+        transform: rotateY(180deg);
     }
+
+    .card-front, .card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-front img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* full image */
+    }
+
+    .card-back {
+        background: #fff;
+        color: #d63384;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        font-weight: bold;
+        padding: 10px;
+        transform: rotateY(180deg);
+        text-align: center;
+    }
+
+    .decor {
+        position: absolute;
+        width: 150px;
+        height: 150px;
+        opacity: 0.15;
+        z-index: -1;
+    }
+
+    .decor:nth-child(1) { top: 10%; left: 5%; transform: rotate(20deg); }
+    .decor:nth-child(2) { top: 30%; right: 5%; transform: rotate(-30deg); }
+    .decor:nth-child(3) { bottom: 10%; left: 20%; transform: rotate(40deg); }
+    .decor:nth-child(4) { bottom: 15%; right: 15%; transform: rotate(-20deg); }
 
     @media (max-width: 600px) {
-        h1 {
-            font-size: 22px;
-        }
+        h1 { font-size: 24px; }
+        .card { width: 140px; height: 200px; }
     }
 </style>
 </head>
 <body>
 
-<h1>Happy Birthday!</h1>
+<h1>Happy Birthday My World</h1>
+
+<!-- Background music -->
+<audio autoplay loop>
+    <source src="https://www.mfiles.co.uk/mp3-downloads/debussy-clair-de-lune.mp3" type="audio/mp3">
+    Your browser does not support audio.
+</audio>
+
 <div class="gallery" id="gallery"></div>
 
-<script>
-window.onload = function() {
-    const totalImages = 10; // ✅ Change this to your number of photos
-    const gallery = document.getElementById('gallery');
+<!-- Decorative flowers (SVG for puzzle effect) -->
+<img src="https://www.svgrepo.com/show/309249/flower.svg" class="decor">
+<img src="https://www.svgrepo.com/show/309249/flower.svg" class="decor">
+<img src="https://www.svgrepo.com/show/309249/flower.svg" class="decor">
+<img src="https://www.svgrepo.com/show/309249/flower.svg" class="decor">
 
-    for (let i = 1; i <= totalImages; i++) {
-        const img = document.createElement('img');
-        img.src = `photo${i}.jpg`; // ✅ Your naming convention
-        img.alt = `photo${i}`;
-        img.onerror = function() {
-            console.error(`Image not found: photo${i}.jpg`);
-        };
-        gallery.appendChild(img);
-    }
-};
+<script>
+const quotes = [
+    "You make every day beautiful ❤️",
+    "My world is brighter with you 🌸",
+    "Your smile is my sunshine ☀️",
+    "I love you more than words 💕",
+    "With you, every moment is magic ✨",
+    "You are my favorite person 🥰",
+    "Happy Birthday, My Forever ❤️"
+];
+
+const totalImages = 7;
+const gallery = document.getElementById('gallery');
+
+for (let i = 1; i <= totalImages; i++) {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.style.setProperty('--angle', `${Math.random() * 10 - 5}deg`); // Random rotation
+
+    const cardInner = document.createElement('div');
+    cardInner.className = 'card-inner';
+
+    const front = document.createElement('div');
+    front.className = 'card-front';
+    const img = document.createElement('img');
+    img.src = `photo${i}.jpg`;
+    front.appendChild(img);
+
+    const back = document.createElement('div');
+    back.className = 'card-back';
+    back.innerText = quotes[i-1];
+
+    cardInner.appendChild(front);
+    cardInner.appendChild(back);
+    card.appendChild(cardInner);
+
+    card.addEventListener('click', () => {
+        card.classList.toggle('flipped');
+    });
+
+    gallery.appendChild(card);
+}
 </script>
 
 </body>
 </html>
-
