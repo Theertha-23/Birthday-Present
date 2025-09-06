@@ -14,6 +14,21 @@
         overflow-x: hidden;
     }
 
+    /* Soft Background Photo8 with pink overlay */
+    body::after {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('photo8.jpg'); /* Replace with your photo8 path */
+        background-size: cover;
+        background-position: center;
+        opacity: 0.2; /* 20% opacity */
+        z-index: -2;
+    }
+
     /* Vector Background Patterns */
     body::before {
         content: "";
@@ -149,7 +164,7 @@ for (let i = 1; i <= totalImages; i++) {
     const front = document.createElement('div');
     front.className = 'card-front';
     const img = document.createElement('img');
-    img.src = `photo${i}.jpg`; // Replace with your image paths
+    img.src = `photo${i}.jpg`; // Replace with your images
     front.appendChild(img);
 
     const back = document.createElement('div');
@@ -171,4 +186,3 @@ for (let i = 1; i <= totalImages; i++) {
 
 </body>
 </html>
-
