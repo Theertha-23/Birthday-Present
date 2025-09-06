@@ -10,9 +10,8 @@
         margin: 0;
         font-family: 'Poppins', sans-serif;
         background: linear-gradient(135deg, #f9e1f0, #ffe8f5);
-        overflow: hidden;
+        overflow-x: hidden;
         position: relative;
-        height: 100vh;
     }
 
     h1 {
@@ -23,17 +22,19 @@
         font-family: 'Great Vibes', cursive;
     }
 
+    .gallery {
+        position: relative;
+        width: 100%;
+        height: 90vh;
+    }
+
     .card {
         width: 180px;
         height: 240px;
         position: absolute;
-        cursor: grab;
+        cursor: pointer;
         transform-style: preserve-3d;
-        transition: transform 0.3s, z-index 0.3s;
-    }
-
-    .card:active {
-        cursor: grabbing;
+        transition: transform 0.5s;
     }
 
     .card-inner {
@@ -55,7 +56,7 @@
         backface-visibility: hidden;
         border-radius: 12px;
         overflow: hidden;
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 6px 15px rgba(0,0,0,0.2);
     }
 
     .card-front img {
@@ -117,6 +118,8 @@
     Your browser does not support audio.
 </audio>
 
+<div class="gallery" id="gallery"></div>
+
 <!-- Decorative flowers -->
 <img src="https://www.svgrepo.com/show/309249/flower.svg" class="decor">
 <img src="https://www.svgrepo.com/show/309249/flower.svg" class="decor">
@@ -130,26 +133,26 @@
 
 <script>
 const quotes = [
-    "You make every day beautiful ❤️",
-    "My world is brighter with you 🌸",
-    "Your smile is my sunshine ☀️",
-    "I love you more than words 💕",
+    "Bubuu You make every day beautiful ❤️",
+    "Me and You are forever 🌸",
+    "Like I always say.. Your smile is my sunshine ☀️",
+    "I love you more than words could describe 💕",
     "With you, every moment is magic ✨",
-    "You are my favorite person 🥰",
+    "BOOBIES 🥰",
     "Happy Birthday, My Forever ❤️"
 ];
 
 const totalImages = 7;
-const cards = [];
+const gallery = document.getElementById('gallery');
 
 for (let i = 1; i <= totalImages; i++) {
     const card = document.createElement('div');
     card.className = 'card';
 
-    // Random position and rotation
+    // Random position without overlapping too much
     const x = Math.random() * (window.innerWidth - 200);
-    const y = Math.random() * (window.innerHeight - 300);
-    const angle = Math.random() * 30 - 15;
+    const y = Math.random() * (window.innerHeight - 280);
+    const angle = Math.random() * 20 - 10; // -10 to 10 degrees
     card.style.left = x + 'px';
     card.style.top = y + 'px';
     card.style.transform = `rotate(${angle}deg)`;
@@ -161,7 +164,7 @@ for (let i = 1; i <= totalImages; i++) {
     const front = document.createElement('div');
     front.className = 'card-front';
     const img = document.createElement('img');
-    img.src = `photo${i}.jpg`;
+    img.src = `photo${i}.jpg`; // replace with your images
     front.appendChild(img);
 
     const back = document.createElement('div');
@@ -172,34 +175,12 @@ for (let i = 1; i <= totalImages; i++) {
     cardInner.appendChild(back);
     card.appendChild(cardInner);
 
-    // Double-click flips
-    card.addEventListener('dblclick', () => {
+    // Flip on click
+    card.addEventListener('click', () => {
         card.classList.toggle('flipped');
     });
 
-    // Draggable
-    let offsetX, offsetY;
-    card.addEventListener('mousedown', (e) => {
-        offsetX = e.clientX - card.offsetLeft;
-        offsetY = e.clientY - card.offsetTop;
-        card.style.zIndex = 1000; // bring to front
-
-        function onMouseMove(e) {
-            card.style.left = (e.clientX - offsetX) + 'px';
-            card.style.top = (e.clientY - offsetY) + 'px';
-        }
-
-        function onMouseUp() {
-            document.removeEventListener('mousemove', onMouseMove);
-            document.removeEventListener('mouseup', onMouseUp);
-        }
-
-        document.addEventListener('mousemove', onMouseMove);
-        document.addEventListener('mouseup', onMouseUp);
-    });
-
-    document.body.appendChild(card);
-    cards.push(card);
+    gallery.appendChild(card);
 }
 
 // Randomize decorative flowers
